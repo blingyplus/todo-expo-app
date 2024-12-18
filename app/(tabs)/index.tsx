@@ -1,6 +1,6 @@
 // app/(tabs)/index.tsx
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, Alert } from "react-native";
 import { StatusFilter } from "../components/StatusFilter";
 import { FormModal } from "../components/modals/FormModal";
 import { DetailsModal } from "../components/modals/DetailsModal";
@@ -41,7 +41,7 @@ export default function TodoScreen() {
         total: response.total,
       });
     } catch (error) {
-      console.error("Failed to fetch todos:", error);
+      Alert.alert("Error", "Failed to load todos. Please try again.", [{ text: "OK" }]);
     } finally {
       setLoading(false);
     }
@@ -69,10 +69,11 @@ export default function TodoScreen() {
   const handleDelete = async (id: number) => {
     try {
       await todoApi.deleteTodo(id);
-      await fetchTodos();
+      await fetchTodos(pagination.currentPage);
       setDetailsModalVisible(false);
+      setSelectedTodo(null);
     } catch (error) {
-      console.error("Failed to delete todo:", error);
+      Alert.alert("Error", "Failed to delete todo. Please try again.", [{ text: "OK" }]);
     }
   };
 
@@ -139,9 +140,7 @@ export default function TodoScreen() {
             <Text style={sharedStyles.addButtonText}>+ Add Todo</Text>
           </TouchableOpacity>
         </View>
-
         <StatusFilter value={filterStatus} onChange={setFilterStatus} />
-
         <FlatList
           data={todos}
           renderItem={({ item }) => (
@@ -160,7 +159,6 @@ export default function TodoScreen() {
           refreshing={loading}
           contentContainerStyle={{ paddingBottom: 16 }}
         />
-
         <FormModal
           visible={formModalVisible}
           onClose={() => {
@@ -172,7 +170,6 @@ export default function TodoScreen() {
           onFormChange={setFormData}
           selectedTodo={selectedTodo}
         />
-
         <DetailsModal visible={detailsModalVisible} todo={selectedTodo} onClose={() => setDetailsModalVisible(false)} onEdit={openEditModal} onDelete={handleDelete} />
       </View>
     </View>
