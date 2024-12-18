@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 // Theme colors
 export const colors = {
@@ -11,12 +11,16 @@ export const colors = {
   white: "#fff",
   black: "#000",
   background: "#f5f5f5",
+  border: "#ddd",
   statusColors: {
     not_started: "#ff9800",
     in_progress: "#2196f3",
     completed: "#4caf50",
   },
 };
+
+const windowWidth = Dimensions.get("window").width;
+const isDesktop = windowWidth > 768;
 
 // Common styles shared across components
 export const sharedStyles = StyleSheet.create({
@@ -25,14 +29,21 @@ export const sharedStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  contentContainer: {
+    flex: 1,
+    maxWidth: 1000,
+    alignSelf: "center",
+    width: "100%",
+  },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+    padding: isDesktop ? 20 : 0,
   },
   modalContent: {
     backgroundColor: colors.white,
-    margin: 20,
     borderRadius: 10,
     padding: 20,
     elevation: 5,
@@ -40,6 +51,9 @@ export const sharedStyles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    width: isDesktop ? "50%" : "90%",
+    maxWidth: 500,
+    minWidth: 300,
   },
 
   // Header styles
@@ -51,32 +65,48 @@ export const sharedStyles = StyleSheet.create({
     backgroundColor: colors.white,
     borderBottomWidth: 1,
     borderBottomColor: colors.lightGrey,
+    maxWidth: 1000,
+    width: "100%",
+    alignSelf: "center",
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: "bold",
   },
 
-  // List item styles
+  // Todo item styles
   todoItem: {
     backgroundColor: colors.white,
     padding: 16,
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 8,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
     elevation: 2,
     shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    width: "100%",
+    maxWidth: 1000,
+    alignSelf: "center",
   },
   todoTitle: {
     fontSize: 16,
     flex: 1,
     marginRight: 10,
+  },
+  todoColumns: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+  },
+  todoColumn: {
+    flex: 2,
+    paddingHorizontal: 8,
+  },
+  statusColumn: {
+    flex: 1,
+    alignItems: "center",
   },
 
   // Form styles
@@ -96,9 +126,9 @@ export const sharedStyles = StyleSheet.create({
   button: {
     padding: 10,
     borderRadius: 5,
-    minWidth: 80,
+    minWidth: isDesktop ? 80 : "100%",
     alignItems: "center",
-    marginLeft: 10,
+    marginLeft: isDesktop ? 10 : 0,
   },
   buttonText: {
     color: colors.white,
@@ -116,9 +146,11 @@ export const sharedStyles = StyleSheet.create({
 
   // Modal button styles
   modalButtons: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    flexDirection: isDesktop ? "row" : "column",
+    justifyContent: isDesktop ? "flex-end" : "center",
+    alignItems: "center",
     marginTop: 20,
+    gap: 10,
   },
   cancelButton: {
     backgroundColor: colors.grey,
@@ -151,6 +183,9 @@ export const sharedStyles = StyleSheet.create({
     backgroundColor: colors.white,
     borderBottomWidth: 1,
     borderBottomColor: colors.lightGrey,
+    width: "100%",
+    maxWidth: 1000,
+    alignSelf: "center",
   },
   filter: {
     height: 50,
@@ -168,15 +203,34 @@ export const sharedStyles = StyleSheet.create({
     lineHeight: 24,
   },
 
-  // List styles
-  list: {
-    flex: 1,
-  },
-
   // Loading styles
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  // Pagination styles (new)
+  paginationContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: colors.white,
+    borderTopWidth: 1,
+    borderTopColor: colors.lightGrey,
+  },
+  paginationButton: {
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: colors.primary,
+    minWidth: 80,
+    alignItems: "center",
+  },
+  paginationButtonDisabled: {
+    backgroundColor: colors.lightGrey,
+  },
+  paginationText: {
+    color: colors.grey,
   },
 });

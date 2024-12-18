@@ -1,12 +1,14 @@
 // app/(tabs)/index.tsx
-import { useState, useEffect } from "react";
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Text, FlatList } from "react-native";
-import { Todo, TodoFormData } from "../types/todo";
-import { todoApi } from "../services/api";
-import { TodoItem } from "../components/TodoItem";
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, ActivityIndicator, FlatList } from "react-native";
 import { StatusFilter } from "../components/StatusFilter";
 import { FormModal } from "../components/modals/FormModal";
 import { DetailsModal } from "../components/modals/DetailsModal";
+import { todoApi } from "../services/api";
+import { Todo, TodoFormData, ApiResponse } from "../types/todo";
+import { formatStatus } from "../utils/helpers";
+import { TodoItem } from "../components/TodoItem";
+import { sharedStyles, colors } from "../styles/shared";
 
 const initialFormData: TodoFormData = {
   title: "",
@@ -22,15 +24,24 @@ export default function TodoScreen() {
   const [detailsModalVisible, setDetailsModalVisible] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [formData, setFormData] = useState<TodoFormData>(initialFormData);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    lastPage: 1,
+    total: 0,
+  });
 
-  const fetchTodos = async () => {
+  const fetchTodos = async (page = 1) => {
     try {
       setLoading(true);
-      const response = await todoApi.fetchTodos(filterStatus || undefined);
+      const response: ApiResponse = await todoApi.fetchTodos(filterStatus || undefined, page);
       setTodos(response.data);
+      setPagination({
+        currentPage: response.current_page,
+        lastPage: response.last_page,
+        total: response.total,
+      });
     } catch (error) {
       console.error("Failed to fetch todos:", error);
-      // You might want to add proper error handling here
     } finally {
       setLoading(false);
     }
@@ -52,7 +63,6 @@ export default function TodoScreen() {
       resetForm();
     } catch (error) {
       console.error("Failed to save todo:", error);
-      // Add proper error handling here
     }
   };
 
@@ -63,7 +73,6 @@ export default function TodoScreen() {
       setDetailsModalVisible(false);
     } catch (error) {
       console.error("Failed to delete todo:", error);
-      // Add proper error handling here
     }
   };
 
@@ -83,98 +92,89 @@ export default function TodoScreen() {
     setFormModalVisible(true);
   };
 
+  const renderFooter = () => (
+    <View style={sharedStyles.paginationContainer}>
+      <Text style={sharedStyles.paginationText}>
+        Showing {todos.length} of {pagination.total} entries
+      </Text>
+      <View style={{ flexDirection: "row", gap: 8 }}>
+        <TouchableOpacity
+          style={[sharedStyles.paginationButton, pagination.currentPage === 1 && sharedStyles.paginationButtonDisabled]}
+          onPress={() => pagination.currentPage > 1 && fetchTodos(pagination.currentPage - 1)}
+          disabled={pagination.currentPage === 1}
+        >
+          <Text style={sharedStyles.buttonText}>Previous</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[sharedStyles.paginationButton, pagination.currentPage === pagination.lastPage && sharedStyles.paginationButtonDisabled]}
+          onPress={() => pagination.currentPage < pagination.lastPage && fetchTodos(pagination.currentPage + 1)}
+          disabled={pagination.currentPage === pagination.lastPage}
+        >
+          <Text style={sharedStyles.buttonText}>Next</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
   if (loading && todos.length === 0) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={sharedStyles.loadingContainer}>
         <ActivityIndicator size="large" />
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Todo List</Text>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => {
-            resetForm();
-            setFormModalVisible(true);
-          }}
-        >
-          <Text style={styles.addButtonText}>+ Add Todo</Text>
-        </TouchableOpacity>
-      </View>
-
-      <StatusFilter value={filterStatus} onChange={setFilterStatus} />
-
-      <FlatList
-        data={todos}
-        renderItem={({ item }) => (
-          <TodoItem
-            todo={item}
+    <View style={sharedStyles.container}>
+      <View style={sharedStyles.contentContainer}>
+        <View style={sharedStyles.header}>
+          <Text style={sharedStyles.headerTitle}>Todo List</Text>
+          <TouchableOpacity
+            style={sharedStyles.addButton}
             onPress={() => {
-              setSelectedTodo(item);
-              setDetailsModalVisible(true);
+              resetForm();
+              setFormModalVisible(true);
             }}
-          />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        style={styles.list}
-        refreshing={loading}
-        onRefresh={fetchTodos}
-      />
+          >
+            <Text style={sharedStyles.addButtonText}>+ Add Todo</Text>
+          </TouchableOpacity>
+        </View>
 
-      <FormModal
-        visible={formModalVisible}
-        onClose={() => {
-          setFormModalVisible(false);
-          resetForm();
-        }}
-        onSubmit={handleSubmit}
-        formData={formData}
-        onFormChange={setFormData}
-        selectedTodo={selectedTodo}
-      />
+        <StatusFilter value={filterStatus} onChange={setFilterStatus} />
 
-      <DetailsModal visible={detailsModalVisible} todo={selectedTodo} onClose={() => setDetailsModalVisible(false)} onEdit={openEditModal} onDelete={handleDelete} />
+        <FlatList
+          data={todos}
+          renderItem={({ item }) => (
+            <TodoItem
+              todo={item}
+              onPress={() => {
+                setSelectedTodo(item);
+                setDetailsModalVisible(true);
+              }}
+              onEdit={() => openEditModal(item)}
+            />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+          ListFooterComponent={renderFooter}
+          onRefresh={fetchTodos}
+          refreshing={loading}
+          contentContainerStyle={{ paddingBottom: 16 }}
+        />
+
+        <FormModal
+          visible={formModalVisible}
+          onClose={() => {
+            setFormModalVisible(false);
+            resetForm();
+          }}
+          onSubmit={handleSubmit}
+          formData={formData}
+          onFormChange={setFormData}
+          selectedTodo={selectedTodo}
+        />
+
+        <DetailsModal visible={detailsModalVisible} todo={selectedTodo} onClose={() => setDetailsModalVisible(false)} onEdit={openEditModal} onDelete={handleDelete} />
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  addButton: {
-    backgroundColor: "#2196f3",
-    padding: 10,
-    borderRadius: 5,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  list: {
-    flex: 1,
-  },
-});

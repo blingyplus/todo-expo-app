@@ -3,8 +3,9 @@ import { Todo, TodoFormData, ApiResponse } from "../types/todo";
 const API_URL = "https://calm-sparkle-production.up.railway.app/api";
 
 export const todoApi = {
-  async fetchTodos(status?: Todo["status"]): Promise<ApiResponse> {
-    const url = status ? `${API_URL}/todos?status=${status}` : `${API_URL}/todos`;
+  async fetchTodos(status?: Todo["status"], page: number = 1): Promise<ApiResponse> {
+    const baseUrl = `${API_URL}/todos?page=${page}`;
+    const url = status ? `${baseUrl}&status=${status}` : baseUrl;
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch todos");
     return response.json();

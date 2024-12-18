@@ -14,9 +14,9 @@ export interface TodoFormData {
 }
 
 export interface ApiResponse {
-  data: Todo[];
   current_page: number;
+  data: Todo[];
   last_page: number;
-  per_page: number;
   total: number;
+  per_page: number;
 }
