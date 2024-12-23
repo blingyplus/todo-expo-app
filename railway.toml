@@ -1,9 +1,7 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm install && npm run build:web"
+buildCommand = "npm install && npm test && npm run build"
 
 [deploy]
-startCommand = "npx serve web-build --listen $PORT --single"
-healthcheckPath = "/"
-healthcheckTimeout = 300
+startCommand = "npx serve dist --listen ${PORT} --single"
 restartPolicyType = "ON_FAILURE"

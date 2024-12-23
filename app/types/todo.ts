@@ -20,3 +20,4 @@ export interface ApiResponse {
   total: number;
   per_page: number;
 }
+

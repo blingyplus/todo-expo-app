@@ -1,14 +1,13 @@
 // app/(tabs)/index.tsx
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, Alert } from "react-native";
-import { StatusFilter } from "../components/StatusFilter";
-import { FormModal } from "../components/modals/FormModal";
-import { DetailsModal } from "../components/modals/DetailsModal";
-import { todoApi } from "../services/api";
+import  StatusFilter  from "../components/StatusFilter";
+import  FormModal  from "../components/modals/FormModal";
+import DetailsModal  from "../components/modals/DetailsModal";
+import  todoApi  from "../services/api";
 import { Todo, TodoFormData, ApiResponse } from "../types/todo";
-import { formatStatus } from "../utils/helpers";
-import { TodoItem } from "../components/TodoItem";
-import { sharedStyles, colors } from "../styles/shared";
+import  TodoItem  from "../components/TodoItem";
+import  sharedStyles from "../styles/shared";
 
 const initialFormData: TodoFormData = {
   title: "",

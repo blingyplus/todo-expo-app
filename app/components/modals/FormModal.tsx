@@ -1,6 +1,6 @@
 import { Modal, View, Text, TouchableOpacity } from "react-native";
-import { Todo, TodoFormData } from "../../types/todo";
-import { TodoForm } from "../TodoForm";
+import {Todo, TodoFormData}  from "../../types/todo";
+import TodoForm from "../TodoForm";
 import { sharedStyles } from "@/app/styles/shared";
 
 interface FormModalProps {
@@ -14,7 +14,7 @@ interface FormModalProps {
 
 const styles = sharedStyles;
 
-export const FormModal = ({ visible, onClose, onSubmit, formData, onFormChange, selectedTodo }: FormModalProps) => (
+const FormModal = ({ visible, onClose, onSubmit, formData, onFormChange, selectedTodo }: FormModalProps) => (
   <Modal visible={visible} animationType="slide" transparent={true}>
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
@@ -35,3 +35,4 @@ export const FormModal = ({ visible, onClose, onSubmit, formData, onFormChange, 
     </View>
   </Modal>
 );
+export default FormModal;

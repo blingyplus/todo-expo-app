@@ -1,4 +1,4 @@
-import { View, TextInput, StyleSheet } from "react-native";
+import { View, TextInput } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TodoFormData } from "../types/todo";
 import { sharedStyles } from "../styles/shared";
@@ -10,7 +10,7 @@ interface TodoFormProps {
 
 const styles = sharedStyles;
 
-export const TodoForm = ({ formData, onFormChange }: TodoFormProps) => (
+const TodoForm = ({ formData, onFormChange }: TodoFormProps) => (
   <View>
     <TextInput style={styles.input} placeholder="Title" value={formData.title} onChangeText={(text) => onFormChange({ ...formData, title: text })} />
 
@@ -30,3 +30,5 @@ export const TodoForm = ({ formData, onFormChange }: TodoFormProps) => (
     </Picker>
   </View>
 );
+
+export default TodoForm;

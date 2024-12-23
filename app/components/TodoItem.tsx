@@ -1,4 +1,3 @@
-// app/components/TodoItem.tsx
 import React from "react";
 import { TouchableOpacity, View, Text } from "react-native";
 import { Todo } from "../types/todo";
@@ -11,9 +10,8 @@ interface TodoItemProps {
   onEdit: (todo: Todo) => void;
 }
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todo, onPress, onEdit }) => (
+const TodoItem = ({ todo, onPress, onEdit }: TodoItemProps) => (
   <TouchableOpacity style={sharedStyles.todoItem} onPress={() => onPress(todo)}>
-    {/* Column layout container */}
     <View style={sharedStyles.todoColumns}>
       <Text style={sharedStyles.todoColumn} numberOfLines={1}>
         {todo.title}
@@ -29,3 +27,5 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onPress, onEdit }) => 
     </View>
   </TouchableOpacity>
 );
+
+export default TodoItem;

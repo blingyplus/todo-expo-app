@@ -2,7 +2,7 @@ import { Todo, TodoFormData, ApiResponse } from "../types/todo";
 
 const API_URL = "https://calm-sparkle-production.up.railway.app/api";
 
-export const todoApi = {
+const todoApi = {
   async fetchTodos(status?: Todo["status"], page: number = 1): Promise<ApiResponse> {
     const baseUrl = `${API_URL}/todos?page=${page}`;
     const url = status ? `${baseUrl}&status=${status}` : baseUrl;
@@ -38,3 +38,5 @@ export const todoApi = {
     if (!response.ok) throw new Error("Failed to delete todo");
   },
 };
+
+export default todoApi;

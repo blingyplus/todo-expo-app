@@ -14,7 +14,7 @@ interface DetailsModalProps {
 
 const styles = sharedStyles;
 
-export const DetailsModal = ({ visible, todo, onClose, onEdit, onDelete }: DetailsModalProps) => {
+const DetailsModal = ({ visible, todo, onClose, onEdit, onDelete }: DetailsModalProps) => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   if (!todo) return null;
@@ -80,3 +80,4 @@ export const DetailsModal = ({ visible, todo, onClose, onEdit, onDelete }: Detai
     </>
   );
 };
+export default DetailsModal;

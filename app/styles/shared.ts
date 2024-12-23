@@ -47,10 +47,7 @@ export const sharedStyles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     elevation: 5,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.25)",
     width: isDesktop ? "50%" : "90%",
     maxWidth: 500,
     minWidth: 300,
@@ -82,10 +79,7 @@ export const sharedStyles = StyleSheet.create({
     marginHorizontal: 16,
     borderRadius: 8,
     elevation: 2,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.25)",
     width: "100%",
     maxWidth: 1000,
     alignSelf: "center",
@@ -234,3 +228,5 @@ export const sharedStyles = StyleSheet.create({
     color: colors.grey,
   },
 });
+
+export default sharedStyles;

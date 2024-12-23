@@ -8,9 +8,7 @@ interface StatusFilterProps {
   onChange: (status: Todo["status"] | "") => void;
 }
 
-const styles = sharedStyles;
-
-export const StatusFilter = ({ value, onChange }: StatusFilterProps) => (
+const StatusFilter = ({ value, onChange }: StatusFilterProps) => (
   <View style={styles.filterContainer}>
     <Picker selectedValue={value} style={styles.filter} onValueChange={onChange}>
       <Picker.Item label="All" value="" />
@@ -20,3 +18,7 @@ export const StatusFilter = ({ value, onChange }: StatusFilterProps) => (
     </Picker>
   </View>
 );
+
+const styles = sharedStyles;
+
+export default StatusFilter;
