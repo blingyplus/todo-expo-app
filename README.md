@@ -1,50 +1,106 @@
-# Welcome to your Expo app 👋
+# Todo App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native Expo application for managing todos, with cross-platform support for iOS, Android, and Web.
 
-## Get started
+## Features
 
-1. Install dependencies
+- Full CRUD operations for todos
+- Filter todos by status (Not Started, In Progress, Completed)
+- Pagination support
+- Cross-platform compatibility
+- Responsive design
+- Dark mode support
 
-   ```bash
-   npm install
-   ```
+## Prerequisites
 
-2. Start the app
+- Node.js 16+
+- npm or yarn
+- Expo CLI (`npm install -g expo-cli`)
+- iOS Simulator (for iOS development)
+- Android Studio & Android SDK (for Android development)
 
-   ```bash
-    npx expo start
-   ```
+## Installation
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+1. Clone the repository:
 ```bash
-npm run reset-project
+git clone https://github.com/blingyplus/todo-expo-app.git
+cd todo-expo-app
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Install dependencies:
+```bash
+npm install
+```
 
-## Learn more
+3. Start the development server:
+```bash
+npm start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Available Scripts
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- `npm start` - Start the Expo development server
+- `npm run android` - Run on Android
+- `npm run ios` - Run on iOS
+- `npm run web` - Run on web browser
+- `npm test` - Run tests
+- `npm run build` - Build for web deployment
+- `npm run serve` - Serve the web build locally
 
-## Join the community
+## Development
 
-Join our community of developers creating universal apps.
+### Environment Configuration
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The app connects to the Laravel backend API. Update the API URL in `app/services/api.ts`:
+
+```typescript
+const API_URL = "your-api-url";
+```
+
+### Project Structure
+
+- `/app` - Main application code
+  - `/components` - Reusable React components
+  - `/services` - API and other services
+  - `/styles` - Shared styles and theme
+  - `/types` - TypeScript type definitions
+  - `/utils` - Utility functions
+
+### Testing
+
+Run the test suite:
+```bash
+npm test
+```
+
+## Deployment
+
+### Web Build
+
+1. Create a production build:
+```bash
+npm run build
+```
+
+2. Deploy the `dist` directory to your web hosting service
+
+The project includes a Railway configuration (`railway.toml`) for easy deployment to Railway.
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Dependencies
+
+Key packages include:
+- Expo v52
+- React Native v0.76
+- React Navigation v7
+- TypeScript
+- Jest for testing
+
+See `package.json` for the complete list of dependencies.
